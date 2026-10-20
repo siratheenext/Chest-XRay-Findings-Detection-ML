@@ -16,7 +16,7 @@ Senior capstone project (ICT Faculty, Mahidol University) — multi-label classi
 
 **Grad-CAM explainability** — the model doesn't just output a probability, it highlights *where* in the X-ray it's looking, so predictions can be sanity-checked against actual anatomy:
 
-![Grad-CAM prediction demo](assets/gradcam_prediction_demo.png)
+![Grad-CAM prediction demo](assets/gradcam_orediction_Full.png)
 
 *Original image, Smooth Grad-CAM heatmap, and the resulting per-disease probabilities for a test case — the model correctly focuses on the cardiac silhouette for its top Cardiomegaly prediction (63.8%).*
 
