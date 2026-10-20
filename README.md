@@ -12,6 +12,22 @@ Senior capstone project (ICT Faculty, Mahidol University) — multi-label classi
 - **Grad-CAM** explainability visualizations for model interpretability
 - IEEE-formatted technical report (17 references) covering training strategy, ROC/Youden's Index analysis, and per-disease evaluation
 
+## Demo & results
+
+**Grad-CAM explainability** — the model doesn't just output a probability, it highlights *where* in the X-ray it's looking, so predictions can be sanity-checked against actual anatomy:
+
+![Grad-CAM prediction demo](assets/gradcam_prediction_demo.png)
+
+*Original image, Smooth Grad-CAM heatmap, and the resulting per-disease probabilities for a test case — the model correctly focuses on the cardiac silhouette for its top Cardiomegaly prediction (63.8%).*
+
+**ROC curve (Cardiomegaly, best-performing class, AUC 0.915)** — the red dot marks the operating threshold chosen via Youden's Index:
+
+![ROC curve for Cardiomegaly](assets/roc_cardiomegaly.png)
+
+**Training convergence (V7, final pipeline)** — validation AUC across epochs for all three backbones, after fixing the cross-architecture layer-freezing bug described below:
+
+![V7 validation AUC comparison across 14 diseases](assets/training_comparison_v7.png)
+
 ## Key finding
 
 All three model variants showed strong internal validation performance but a **severe performance collapse when evaluated cross-dataset on PadChest** — indicating that domain shift (hospital, equipment, patient population) affects generalization far more than the AP/PA view difference does. This finding, and its implications for deploying chest X-ray models trained on a single institution's data, is analyzed in the full report.
@@ -27,16 +43,16 @@ All three model variants showed strong internal validation performance but a **s
 This repository contains the **final (V7) pipeline** and the cross-dataset validation code. Earlier experimental iterations (V2–V6, hybrid variants) and the trained model weights/raw datasets are excluded, to keep the published code focused on the reviewed, final pipeline rather than the full iteration history.
 
 ```
-├── Calc_Mixed_V1_Per_Model_AUC.py   # Per-model AUC breakdown for the mixed-view ensemble
+├── Calc_Mixed_V1_Per_Model_AUC.py # Per-model AUC breakdown for the mixed-view ensemble
 ├── src/
-│   ├── Train/                      # Training scripts for the V7 model (Mixed / AP-only / PA-only)
-│   ├── Evaluate/                   # Internal + external evaluation, AP vs PA breakdown
-│   ├── Predict/                    # Inference / prediction analysis
-│   ├── test_cross_dataset/         # PadChest cross-dataset generalization testing
-│   ├── create_test_set.py, create_internal_test.py   # Leakage-safe test set construction
-│   ├── format_padchest_to_v7*.py, prepare_external_test.py, Expand_Padchest_Test.py  # External dataset preparation
-│   ├── Make_NIH_Heatmaps_Complete.py, viewer_v7.py, predict_viewer.py  # Grad-CAM heatmap generation & viewing
-│   └── SelectTrainData.py, Train_V7_All_Versions*.py, Evaluate_All_Versions.py, Evaluate_Full_Matrix.py
+│ ├── Train/ # Training scripts for the V7 model (Mixed / AP-only / PA-only)
+│ ├── Evaluate/ # Internal + external evaluation, AP vs PA breakdown
+│ ├── Predict/ # Inference / prediction analysis
+│ ├── test_cross_dataset/ # PadChest cross-dataset generalization testing
+│ ├── create_test_set.py, create_internal_test.py # Leakage-safe test set construction
+│ ├── format_padchest_to_v7*.py, prepare_external_test.py, Expand_Padchest_Test.py # External dataset preparation
+│ ├── Make_NIH_Heatmaps_Complete.py, viewer_v7.py, predict_viewer.py # Grad-CAM heatmap generation & viewing
+│ └── SelectTrainData.py, Train_V7_All_Versions*.py, Evaluate_All_Versions.py, Evaluate_Full_Matrix.py
 ```
 
 ## Tech stack
